@@ -2,7 +2,7 @@ import React from "react";
 
 function FighterImageComponent(props) {
   return (
-    <div>
+    <div className="card-holder">
       <img
         className="rosterImages"
         src={props.image}

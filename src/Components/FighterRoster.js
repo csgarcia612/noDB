@@ -33,15 +33,23 @@ class FighterRoster extends Component {
       : "GATHERING FIGHTERS";
     return (
       <div>
+        <div className="playerNameDisplay">
+          <p className="nameOne">PLAYER 1 : {this.state.player1}</p>
+          <p className="nameTwo">PLAYER 2 : {this.state.player2}</p>
+        </div>
         <div className="playerNameInput">
-          <input value={this.state.player1} onChange={this.playerOneName} />
-          <input value={this.state.player2} onChange={this.playerTwoName} />
-        </div>
-        <div>
-          <p>PLAYER 1 : {this.state.player1}</p>
-        </div>
-        <div>
-          <p>PLAYER 2 : {this.state.player2}</p>
+          <input
+            className="textBoxOne"
+            placeholder="ENTER NAME"
+            value={this.state.player1}
+            onChange={this.playerOneName}
+          />
+          <input
+            className="textBoxTwo"
+            placeholder="ENTER NAME"
+            value={this.state.player2}
+            onChange={this.playerTwoName}
+          />
         </div>
         <div className="characterCollection">{characterCollection};</div>
       </div>

@@ -41,7 +41,7 @@ class App extends Component {
   }
 
   selectFighterOne() {
-    let playerOneCharacter = Math.floor(Math.random() * (25 - 1) + 1);
+    let playerOneCharacter = Math.floor(Math.random() * (48 - 1) + 1);
     axios.post(`/api/playerone?p1=${playerOneCharacter}`).then(res => {
       this.setState({
         playerOne: res.data,
@@ -56,7 +56,7 @@ class App extends Component {
   }
 
   selectFighterTwo() {
-    let playerTwoCharacter = Math.floor(Math.random() * (25 - 1) + 1);
+    let playerTwoCharacter = Math.floor(Math.random() * (48 - 1) + 1);
     axios.post(`/api/playertwo?p2=${playerTwoCharacter}`).then(res => {
       this.setState({
         playerTwo: res.data,
@@ -70,7 +70,7 @@ class App extends Component {
   changeFighterOne() {
     // UPDATE/PUT action
     // Run randomizer again to choose a new fighter
-    let changePlayerOne = Math.floor(Math.random() * (25 - 1) + 1);
+    let changePlayerOne = Math.floor(Math.random() * (48 - 1) + 1);
     axios.put(`/api/changeone/`, { changePlayerOne }).then(res => {
       this.setState({
         playerOne: res.data,
@@ -84,7 +84,7 @@ class App extends Component {
   changeFighterTwo() {
     // UPDATE/PUT action
     // Run randomizer again to choose a new fighter
-    let changePlayerTwo = Math.floor(Math.random() * (25 - 1) + 1);
+    let changePlayerTwo = Math.floor(Math.random() * (48 - 1) + 1);
     // axios.put(`/api/changetwo?cp2=${changePlayerTwo}`).then(res => {
     axios.put(`/api/changetwo/`, { changePlayerTwo }).then(res => {
       this.setState({
@@ -157,7 +157,12 @@ class App extends Component {
     const cornerOne = this.state.playerOne.map(card => {
       return (
         <div key={this.state.playerOne[0][0].name} className="oneCard">
-          <img src={this.state.fighterOneImage} alt="FIGHTER 1" />
+          <img
+            className="selectedFighter1"
+            src={this.state.fighterOneImage}
+            alt="FIGHTER 1"
+          />
+          <h3 className="fighterName">{this.state.fighterOneName}</h3>
           <button
             className="changeOne"
             onClick={() => {
@@ -175,7 +180,12 @@ class App extends Component {
     const cornerTwo = this.state.playerTwo.map(card => {
       return (
         <div key={this.state.playerTwo[0][0].name} className="twoCard">
-          <img src={this.state.fighterTwoImage} alt="FIGHTER 2" />
+          <img
+            className="selectedFighter2"
+            src={this.state.fighterTwoImage}
+            alt="FIGHTER 2"
+          />
+          <h3 className="fighterName">{this.state.fighterTwoName}</h3>
           <button
             className="changeTwo"
             onClick={() => {
@@ -192,18 +202,17 @@ class App extends Component {
 
     const emptyCornerOne = this.state.playerOne.map(card => {
       return (
-        <div key={this.state.playerOne[0][0].name} className="clearedOne">
-          <button
-            className="removeFighter"
-            onClick={() => {
-              this.state.playerOne.length === 1
-                ? this.newMatchOne()
-                : alert("P1 : FIGHTER NEEDED");
-            }}
-          >
-            REMOVE FIGHTER 1
-          </button>
-        </div>
+        <button
+          key={this.state.playerOne[0][0].name}
+          className="removeFighterOne"
+          onClick={() => {
+            this.state.playerOne.length === 1
+              ? this.newMatchOne()
+              : alert("P1 : FIGHTER NEEDED");
+          }}
+        >
+          REMOVE FIGHTER 1
+        </button>
       );
     });
 
@@ -211,7 +220,7 @@ class App extends Component {
       return (
         <div key={this.state.playerTwo[0][0].name} className="clearedTwo">
           <button
-            className="removeFighter"
+            className="removeFighterTwo"
             onClick={() => {
               this.state.playerTwo.length === 1
                 ? this.newMatchTwo()
@@ -229,27 +238,31 @@ class App extends Component {
         <header>
           <div className="title-banner">
             <h3>President "Evil Morty" Presents:</h3>
+          </div>
+          <div className="arenaName">
             <h1>THE CITADEL BATTLE ARENA</h1>
           </div>
         </header>
 
         <section className="arena">
-          <div className="player-one-container">
-            <div>{chooseFighterOne}</div>
-            <div>{cornerOne}</div>
-            <div>{emptyCornerOne}</div>
-          </div>
-          <div className="player-two-container">
-            <div>{chooseFighterTwo}</div>
-            <div>{cornerTwo}</div>
-            <div>{emptyCornerTwo}</div>
-          </div>
           <div>
             <BattleComponent
               power1={fighterOnePower}
               power2={fighterTwoPower}
               fighting={this.battle}
             />
+          </div>
+          <div className="playersContainer">
+            <div className="player-one-container">
+              {chooseFighterOne}
+              {cornerOne}
+              {emptyCornerOne}
+            </div>
+            <div className="player-two-container">
+              {chooseFighterTwo}
+              {cornerTwo}
+              {emptyCornerTwo}
+            </div>
           </div>
         </section>
 
