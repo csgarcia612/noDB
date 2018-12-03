@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import "./App.css";
 import axios from "axios";
+import FighterRoster from "./Components/FighterRoster";
+import BattleComponent from "./Components/BattleComponent";
 
 class App extends Component {
   constructor() {
@@ -11,8 +13,10 @@ class App extends Component {
       playerTwo: [],
       fighterOneImage: null,
       fighterOneName: "",
+      fighterOnePower: 0,
       fighterTwoImage: null,
-      fighterTwoName: ""
+      fighterTwoName: "",
+      fighterTwoPower: 0
     };
     this.getCharacterList = this.getCharacterList.bind(this);
     this.selectFighterOne = this.selectFighterOne.bind(this);
@@ -20,6 +24,7 @@ class App extends Component {
     this.changeFighterOne = this.changeFighterOne.bind(this);
     this.changeFighterTwo = this.changeFighterTwo.bind(this);
     this.newMatchOne = this.newMatchOne.bind(this);
+    this.battle = this.battle.bind(this);
   }
 
   componentDidMount() {
@@ -41,7 +46,8 @@ class App extends Component {
       this.setState({
         playerOne: res.data,
         fighterOneImage: res.data[0][0].image,
-        fighterOneName: res.data[0][0].name
+        fighterOneName: res.data[0][0].name,
+        fighterOnePower: res.data[0][0].power
       });
     });
     // CREATE/POST action
@@ -55,7 +61,8 @@ class App extends Component {
       this.setState({
         playerTwo: res.data,
         fighterTwoImage: res.data[0][0].image,
-        fighterTwoName: res.data[0][0].name
+        fighterTwoName: res.data[0][0].name,
+        fighterTwoPower: res.data[0][0].power
       });
     });
   }
@@ -68,7 +75,8 @@ class App extends Component {
       this.setState({
         playerOne: res.data,
         fighterOneImage: res.data[0][0].image,
-        fighterOneName: res.data[0][0].name
+        fighterOneName: res.data[0][0].name,
+        fighterOnePower: res.data[0][0].power
       });
     });
   }
@@ -82,13 +90,10 @@ class App extends Component {
       this.setState({
         playerTwo: res.data,
         fighterTwoImage: res.data[0][0].image,
-        fighterTwoName: res.data[0][0].name
+        fighterTwoName: res.data[0][0].name,
+        fighterTwoPower: res.data[0][0].power
       });
     });
-  }
-
-  battle() {
-    // Compare the two fighters power levels and have alert pop up the winner
   }
 
   newMatchOne() {
@@ -109,19 +114,20 @@ class App extends Component {
     });
   }
 
+  battle(val1, val2) {
+    val1 > val2
+      ? alert(`WINNER : ${this.state.fighterOneName}`)
+      : val1 === val2
+      ? alert(
+          `${this.state.fighterOneName} AND ${
+            this.state.fighterTwoName
+          } ARE BOTH LOSERS!`
+        )
+      : alert(`WINNER : ${this.state.fighterTwoName}`);
+  }
+
   render() {
-    const { characters } = this.state;
-    const characterCollection = characters.length
-      ? characters.map(card => {
-          return (
-            <img
-              key={card.id}
-              src={card.image}
-              alt="CITADEL OF RICKS AND MORTYS"
-            />
-          );
-        })
-      : "GATHERING FIGHTERS";
+    const { characters, fighterOnePower, fighterTwoPower } = this.state;
     const chooseFighterOne = (
       <button
         className="pickP1"
@@ -212,14 +218,11 @@ class App extends Component {
                 : alert("P2 : FIGHTER NEEDED");
             }}
           >
-            REMOVE FIGHTER 1
+            REMOVE FIGHTER 2
           </button>
         </div>
       );
     });
-
-    console.log("P1", this.state.playerOne);
-    console.log("P2", this.state.playerTwo);
 
     return (
       <div className="App">
@@ -241,10 +244,19 @@ class App extends Component {
             <div>{cornerTwo}</div>
             <div>{emptyCornerTwo}</div>
           </div>
+          <div>
+            <BattleComponent
+              power1={fighterOnePower}
+              power2={fighterTwoPower}
+              fighting={this.battle}
+            />
+          </div>
         </section>
 
         <section className="roster">
-          <div className="fighter-pics-container">{characterCollection}</div>
+          <div className="fighter-pics-container">
+            <FighterRoster characters={characters} />
+          </div>
         </section>
       </div>
     );
